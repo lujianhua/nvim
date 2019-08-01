@@ -9,6 +9,15 @@ set cindent
 set tabstop=2
 set expandtab
 set shiftwidth=2
+set nocompatible
+noremap j h
+noremap i k
+noremap k j
+noremap h i
+noremap H I
+map S :w<CR>
+map s <nop>
+map Q :q<CR>
 
 call plug#begin('~/.config/nvim/plugged')
 "CPP syntax highlight
@@ -141,9 +150,9 @@ set completeopt=noinsert,menuone,noselect
 
 autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
 
-nnoremap <C-b>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %.out && ./%.out<CR>
+nnoremap <C-b>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %.out && xfce4-terminal<CR>
 nnoremap <C-c>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %.out<CR>
-nnoremap <C-g>  <Esc>:w<CR>:!g++ -std=c++11 -g % -Wall -o %.out && gdb %.out<CR>
+"nnoremap <C-g>  <Esc>:w<CR>:!g++ -std=c++11 -g % -Wall -o %.out && gdb %.out<CR>
 
 "syntastic
 set statusline+=%#warningmsg#
