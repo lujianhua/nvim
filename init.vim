@@ -1,7 +1,12 @@
 filetype on
 filetype plugin on
-colorscheme ron
+filetype plugin indent on
+filetype indent on
+set mouse=a
+set encoding=utf-8
+let &t_ut=''
 syntax on
+color ron
 set number
 set noerrorbells
 set autoindent
@@ -9,12 +14,37 @@ set cindent
 set tabstop=2
 set expandtab
 set shiftwidth=2
+set softtabstop=2
+set list
+set listchars=tab:▸\ ,trail:▫
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 set nocompatible
+set cursorline
+set wrap
+set wildmenu
+set showcmd
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+noremap = nzz
+noremap - Nzz
+map <LEADER><CR> :nohlsearch<CR>
 noremap j h
 noremap i k
 noremap k j
 noremap h i
+noremap K 5j
+noremap I 5k
 noremap H I
+noremap <LEADER><CR> :vsplit<CR>
+map <LEADER>j <C-w>h
+map <LEADER>l <C-w>l
+map <left> :vertical resize-5<CR>
+map <right> :vertical resize+5<CR>
+map t :tabe<CR>
+map tn :+tabnext<CR>
+map tp :-tabnext<CR>
 map S :w<CR>
 map s <nop>
 map Q :q<CR>
@@ -46,8 +76,6 @@ Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdcommenter'
 "LeaderF
 Plug 'Yggdroot/LeaderF'
-"vim-easymotion
-Plug 'easymotion/vim-easymotion'
 "ncm2
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
@@ -62,6 +90,8 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 "syntastic
 Plug 'vim-syntastic/syntastic'
+"vim-snazzy
+"Plug 'connorholyday/vim-snazzy'
 call plug#end()
 
 
@@ -130,16 +160,7 @@ let g:Lf_WildIgnore = {
 let g:Lf_UseCache = 0
 
 
-"easymotion
-map <Leader> <Plug>(easymotion-prefix)
-let g:EasyMotion_do_mapping = 0
 
-map <leader>j <Plug>(easymotion-j)
-map <leader>k <Plug>(easymotion-k)
-map <leader>h <Plug>(easymotion-linebackward)
-map <leader>l <Plug>(easymotion-lineforward)
-map <leader>s <Plug>(easymotion-s)
-map <leader>w <Plug>(easymotion-bd-w)
 
 " enable ncm2 for all buffers
 autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -163,3 +184,5 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+"let g:SnazzyTransparent = 1
