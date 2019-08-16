@@ -6,7 +6,7 @@ set mouse=a
 set encoding=utf-8
 let &t_ut=''
 syntax on
-color ron
+colorscheme molokai
 set number
 set noerrorbells
 set autoindent
@@ -19,7 +19,7 @@ set list
 set listchars=tab:▸\ ,trail:▫
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 set nocompatible
-set cursorline
+"set cursorline
 set wrap
 set wildmenu
 set showcmd
@@ -27,9 +27,10 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
+set scrolloff=5
 noremap = nzz
 noremap - Nzz
-map <LEADER><CR> :nohlsearch<CR>
+map <LEADER>m :nohlsearch<CR>
 noremap j h
 noremap i k
 noremap k j
@@ -48,8 +49,22 @@ map tp :-tabnext<CR>
 map S :w<CR>
 map s <nop>
 map Q :q<CR>
+" Compile function
+map r :call Compilemd()<CR>
+func! Compilemd()
+  exec "w"
+  exec "MarkdownPreview"
+endfunc
 
 call plug#begin('~/.config/nvim/plugged')
+"vimwiki
+Plug 'vimwiki/vimwiki'
+"/vim-table-mode
+Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
+"markdown-preview.nvim
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for' :['markdown', 'vim-plug'] }
+"vim-colorschemes
+Plug 'flazz/vim-colorschemes'
 "CPP syntax highlight
 Plug 'octol/vim-cpp-enhanced-highlight'
 "rainbow
@@ -60,8 +75,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "auto-pairs
 Plug 'jiangmiao/auto-pairs'
-"YCM
-"Plug 'Valloric/YouCompleteMe'
 "completeparameter
 Plug 'tenfyzhong/CompleteParameter.vim'
 "nerdtree
@@ -74,8 +87,6 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'majutsushi/tagbar'
 "nerdcommenter
 Plug 'scrooloose/nerdcommenter'
-"LeaderF
-Plug 'Yggdroot/LeaderF'
 "ncm2
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
@@ -92,6 +103,8 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'vim-syntastic/syntastic'
 "vim-snazzy
 "Plug 'connorholyday/vim-snazzy'
+"vim-monokai
+Plug 'sickill/vim-monokai'
 call plug#end()
 
 
@@ -151,17 +164,6 @@ let g:NERDCommentEmptyLines         = 1
 let g:NERDTrimTrailingWhitespace    = 1
 let g:NERDToggleCheckAllLines       = 1
 
-"LeaderF
-nnoremap <silent><leader>f :LeaderfFile<cr>
-let g:Lf_WildIgnore = {
-            \ 'dir': ['.svn','.git','.hg','.vscode','.wine','.deepinwine','.oh-my-zsh'],
-            \ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
-            \}
-let g:Lf_UseCache = 0
-
-
-
-
 " enable ncm2 for all buffers
 autocmd BufEnter * call ncm2#enable_for_buffer()
 
@@ -171,8 +173,8 @@ set completeopt=noinsert,menuone,noselect
 
 autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
 
-nnoremap <C-b>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %.out && xfce4-terminal<CR>
-nnoremap <C-c>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %.out<CR>
+nnoremap <C-b>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %< && xfce4-terminal<CR>
+nnoremap <C-c>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %<<CR>
 "nnoremap <C-g>  <Esc>:w<CR>:!g++ -std=c++11 -g % -Wall -o %.out && gdb %.out<CR>
 
 "syntastic
@@ -185,4 +187,40 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-"let g:SnazzyTransparent = 1
+" ===
+" === MarkdownPreview
+" ===
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_refresh_slow = 0
+let g:mkdp_command_for_global = 0
+let g:mkdp_open_to_the_world = 0
+let g:mkdp_open_ip = ''
+let g:mkdp_browser = 'firefox'
+let g:mkdp_echo_preview_url = 0
+let g:mkdp_browserfunc = ''
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1
+    \ }
+let g:mkdp_markdown_css = ''
+let g:mkdp_highlight_css = ''
+let g:mkdp_port = ''
+let g:mkdp_page_title = '「${name}」'
+
+" My snippits
+source ~/.config/nvim/snippits.vim
+
+" ===
+" " === vim-table-mode
+" " ===
+map <LEADER>ig :TableModeToggle<CR>
+
+"vimwiki
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
