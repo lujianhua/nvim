@@ -11,8 +11,8 @@ set number
 set noerrorbells
 set autoindent
 set cindent
-set tabstop=2
 set expandtab
+set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set list
@@ -49,14 +49,50 @@ map tp :-tabnext<CR>
 map S :w<CR>
 map s <nop>
 map Q :q<CR>
+set clipboard+=unnamedplus
 " Compile function
-map r :call Compilemd()<CR>
-func! Compilemd()
+map r :call CompileRun()<CR>
+func! CompileRun()
   exec "w"
-  exec "MarkdownPreview"
+  if &filetype == 'tex'
+    exec "!xelatex %"
+    exec "!epdfview %<.pdf"
+  elseif &filetype == "cpp"
+    exec "!g++ -std=c++11 % -Wall -o %<"
+    set splitbelow
+    :sp
+    :res -15
+    :term ./%<
+  elseif &filetype == 'python'
+    set splitbelow
+    :sp
+    :res -15
+    :term python3 %
+  elseif &filetype == 'vimwiki'
+    exec "MarkdownPreview"
+  endif
 endfunc
 
 call plug#begin('~/.config/nvim/plugged')
+"coc
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"fzf
+Plug 'junegunn/fzf.vim'
+Plug '/usr/bin/fzf'
+"coc
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Bookmarks
+Plug 'kshenoy/vim-signature'
+"tabular
+Plug 'godlygeek/tabular'
+"SimpylFold
+Plug 'tmhedberg/SimpylFold'
+"indentline
+Plug 'Yggdroot/indentLine'
+" Undo Tree
+Plug 'mbbill/undotree/'
+"nerdtree-git
+Plug 'Xuyuanp/nerdtree-git-plugin'
 "vimwiki
 Plug 'vimwiki/vimwiki'
 "/vim-table-mode
@@ -88,12 +124,12 @@ Plug 'majutsushi/tagbar'
 "nerdcommenter
 Plug 'scrooloose/nerdcommenter'
 "ncm2
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-match-highlight'
-Plug 'ncm2/ncm2-pyclang'
+"Plug 'ncm2/ncm2'
+"Plug 'roxma/nvim-yarp'
+"Plug 'ncm2/ncm2-bufword'
+"Plug 'ncm2/ncm2-path'
+"Plug 'ncm2/ncm2-match-highlight'
+"Plug 'ncm2/ncm2-pyclang'
 "language sercer
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -103,8 +139,6 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'vim-syntastic/syntastic'
 "vim-snazzy
 "Plug 'connorholyday/vim-snazzy'
-"vim-monokai
-Plug 'sickill/vim-monokai'
 call plug#end()
 
 "cpp highlight configuration
@@ -118,7 +152,7 @@ let g:cpp_no_function_highlight = 1
 let g:rainbow_active = 1
 
 "airline-theme
-"let g:airline_theme='atomic'
+let g:airline_theme='light'
 
 "complete_parameter
 inoremap <silent><expr> ( complete_parameter#pre_complete("()")
@@ -164,17 +198,11 @@ let g:NERDTrimTrailingWhitespace    = 1
 let g:NERDToggleCheckAllLines       = 1
 
 " enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
+"autocmd BufEnter * call ncm2#enable_for_buffer()
 
 
 "IMPORTANT: :help Ncm2PopupOpen for more information
-set completeopt=noinsert,menuone,noselect
-
-autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
-
-nnoremap <C-b>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %< && xfce4-terminal<CR>
-nnoremap <C-c>  <Esc>:w<CR>:!g++ -std=c++11 % -Wall -o %<<CR>
-"nnoremap <C-g>  <Esc>:w<CR>:!g++ -std=c++11 -g % -Wall -o %.out && gdb %.out<CR>
+"set completeopt=noinsert,menuone,noselect
 
 "syntastic
 set statusline+=%#warningmsg#
@@ -221,6 +249,55 @@ source ~/.config/nvim/snippits.vim
 map <LEADER>ig :TableModeToggle<CR>
 
 "vimwiki
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
-autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
+"autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
+
+let g:airline_powerline_fonts = 1
+
+" ==
+" == NERDTree-git
+" ==
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
+
+" ===
+" === Undotree
+" ===
+map L :UndotreeToggle<CR>
+let g:undotree_DiffAutoOpen = 1
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_ShortIndicators = 1
+
+" ===
+" === indentLine
+" ===
+let g:indentLine_char = '¦'
+let g:indentLine_color_term = 252
+let g:indentLine_color_gui = 'F3F3F3'
+
+
+
+" ===
+" === FZF
+" ===
+map <leader>f :FZF<CR>
+
+"Coc Useful commands
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+
+let g:tex_flavor = "latex"
+
