@@ -6,6 +6,7 @@ set mouse=a
 set encoding=utf-8
 let &t_ut=''
 syntax on
+set background=light
 colorscheme molokai
 set number
 set noerrorbells
@@ -281,7 +282,7 @@ let g:undotree_ShortIndicators = 1
 " === indentLine
 " ===
 let g:indentLine_char = '¦'
-let g:indentLine_color_term = 252
+let g:indentLine_color_term = 245
 let g:indentLine_color_gui = 'F3F3F3'
 
 
@@ -301,3 +302,4 @@ nmap <leader>rn <Plug>(coc-rename)
 
 let g:tex_flavor = "latex"
 
+let g:solarized_termtrans=1
