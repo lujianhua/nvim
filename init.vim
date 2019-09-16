@@ -302,4 +302,5 @@ nmap <leader>rn <Plug>(coc-rename)
 
 let g:tex_flavor = "latex"
 
-let g:solarized_termtrans=1
+"ignore lacheck for {
+let g:syntastic_tex_lacheck_quiet_messages = {'regex':'\Vpossible unwanted space at'}

@@ -139,20 +139,20 @@ if &t_Co > 255
       hi CursorLine               ctermbg=235   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
    else
-      hi Normal       ctermfg=15 ctermbg=233
+      hi Normal       ctermfg=227 ctermbg=233
       hi CursorLine               ctermbg=15   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
    endif
    hi Boolean         ctermfg=135
    hi Character       ctermfg=144
    hi Number          ctermfg=15
-   hi String          ctermfg=226
-   hi Conditional     ctermfg=161               cterm=bold
+   hi String          ctermfg=208
+   hi Conditional     ctermfg=82               cterm=bold
    hi Constant        ctermfg=51               cterm=bold
    hi Cursor          ctermfg=16  ctermbg=253
    hi Debug           ctermfg=225               cterm=bold
    hi Define          ctermfg=81
-   hi Delimiter       ctermfg=241
+   hi Delimiter       ctermfg=202
 
    hi DiffAdd                     ctermbg=24
    hi DiffChange      ctermfg=181 ctermbg=239
@@ -171,7 +171,7 @@ if &t_Co > 255
    hi Ignore          ctermfg=244 ctermbg=232
    hi IncSearch       ctermfg=193 ctermbg=16
 
-   hi keyword         ctermfg=161               cterm=bold
+   hi keyword         ctermfg=82               cterm=bold
    hi Label           ctermfg=229               cterm=none
    hi Macro           ctermfg=193
    hi SpecialKey      ctermfg=81
@@ -204,7 +204,7 @@ if &t_Co > 255
        hi SpellLocal              ctermbg=17
        hi SpellRare  ctermfg=none ctermbg=none  cterm=reverse
    endif
-   hi Statement       ctermfg=197               cterm=bold
+   hi Statement       ctermfg=190               cterm=bold
    hi StatusLine      ctermfg=238 ctermbg=253
    hi StatusLineNC    ctermfg=244 ctermbg=232
    hi StorageClass    ctermfg=208
@@ -213,8 +213,8 @@ if &t_Co > 255
    hi Title           ctermfg=166
    hi Todo            ctermfg=231 ctermbg=232   cterm=bold
 
-   hi Typedef         ctermfg=81
-   hi Type            ctermfg=81                cterm=none
+   hi Typedef         ctermfg=198
+   hi Type            ctermfg=198                cterm=none
    hi Underlined      ctermfg=244               cterm=underline
 
    hi VertSplit       ctermfg=244 ctermbg=232   cterm=bold
@@ -223,7 +223,7 @@ if &t_Co > 255
    hi WarningMsg      ctermfg=231 ctermbg=238   cterm=bold
    hi WildMenu        ctermfg=81  ctermbg=16
 
-   hi Comment         ctermfg=68Q
+   hi Comment         ctermfg=51
    hi CursorColumn                ctermbg=236
    hi ColorColumn                 ctermbg=236
    hi LineNr          ctermfg=250 ctermbg=236
