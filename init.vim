@@ -20,7 +20,7 @@ set list
 set listchars=tab:▸\ ,trail:▫
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 set nocompatible
-"set cursorline
+set cursorline
 set wrap
 set wildmenu
 set showcmd
@@ -32,6 +32,7 @@ set scrolloff=5
 noremap = nzz
 noremap - Nzz
 map <LEADER>m :nohlsearch<CR>
+map se <C-g>
 noremap j h
 noremap i k
 noremap k j
@@ -71,10 +72,20 @@ func! CompileRun()
     :term python3 %
   elseif &filetype == 'vimwiki'
     exec "MarkdownPreview"
+  elseif &filetype == 'java'
+    exec "!javac %"
+    set splitbelow
+    :sp
+    :res -15
+    :term java %<
   endif
 endfunc
 
 call plug#begin('~/.config/nvim/plugged')
+"gutentags
+Plug 'ludovicchabant/vim-gutentags'
+"ale
+Plug 'dense-analysis/ale'
 "coc
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "fzf
@@ -137,7 +148,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'zsh install.sh',
     \ }
 "syntastic
-Plug 'vim-syntastic/syntastic'
+"Plug 'vim-syntastic/syntastic'
 "vim-snazzy
 "Plug 'connorholyday/vim-snazzy'
 call plug#end()
@@ -206,14 +217,14 @@ let g:NERDToggleCheckAllLines       = 1
 "set completeopt=noinsert,menuone,noselect
 
 "syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
 " ===
 " === MarkdownPreview
@@ -253,7 +264,7 @@ map <LEADER>ig :TableModeToggle<CR>
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 "autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
 
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 
 " ==
 " == NERDTree-git
@@ -303,4 +314,47 @@ nmap <leader>rn <Plug>(coc-rename)
 let g:tex_flavor = "latex"
 
 "ignore lacheck for {
-let g:syntastic_tex_lacheck_quiet_messages = {'regex':'\Vpossible unwanted space at'}
+"let g:syntastic_tex_lacheck_quiet_messages = {'regex':'\Vpossible unwanted space at'}
+
+"ale config
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = 'X'
+let g:ale_sign_warning = 'w'
+let g:ale_statusline_format = ['✗ 5%d','✹ %d','✔︎ OK',]
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leavel = 1
+let g:ale_c_gcc_options = '-Wall -02 -std=c99'
+let g:ale_cpp_gcc_options = '-Wal -02 -std=c++14'
+let g:ale_c_cppcheck_options = ''
+let g:ale_cpp_cppcheck_options = ''
+
+"gutentags
+let g:gutentags_project_root = ['.root','.svn','.git']
+
+"ctags
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+"cscopse
+if has("cscope")
+  set csprg=/usr/bin/cscope
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+    if filereadable("cscope.out")
+      cs add cscope.out
+    endif
+    set csverb
+  endif 
+
+  nmap <C-/>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-/>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-/>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-/>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-/>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+  nmap <C-/>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+  nmap <C-/>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+  nmap <C-/>d :cs find d <C-R>=expand("<cword>")<CR><CR>
