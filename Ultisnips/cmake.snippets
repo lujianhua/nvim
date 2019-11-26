@@ -1,0 +1,20 @@
+snippet qcmake "for loop"
+cmake_minimum_required(VERSION 3.15.0)
+
+project(${1:project})
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
+add_executable(${2:target}
+    mainwindow.ui
+    mainwindow.cpp
+    main.cpp
+)
+
+target_link_libraries(${3:target} Qt5::Widgets)
+${0}
+endsnippet

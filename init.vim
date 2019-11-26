@@ -82,6 +82,12 @@ func! CompileRun()
 endfunc
 
 call plug#begin('~/.config/nvim/plugged')
+"vim-cmake
+Plug 'ilyachur/cmake4vim'
+"vim-snippets
+Plug 'honza/vim-snippets'
+"UltiSnips
+Plug 'SirVer/ultisnips'
 "gutentags
 Plug 'ludovicchabant/vim-gutentags'
 "ale
@@ -235,7 +241,7 @@ let g:mkdp_refresh_slow = 0
 let g:mkdp_command_for_global = 0
 let g:mkdp_open_to_the_world = 0
 let g:mkdp_open_ip = ''
-let g:mkdp_bruowser = 'firefox'
+let g:mkdp_bruowser = 'chromium'
 let g:mkdp_echo_preview_url = 0
 let g:mkdp_browserfunc = ''
 let g:mkdp_preview_options = {
@@ -264,7 +270,7 @@ map <LEADER>ig :TableModeToggle<CR>
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 "autocmd FileType c,cpp nnoremap <buffer> gd :<c-u>call ncm2_pyclang#goto_declaration()<cr>
 
-"let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 
 " ==
 " == NERDTree-git
@@ -313,9 +319,6 @@ nmap <leader>rn <Plug>(coc-rename)
 
 let g:tex_flavor = "latex"
 
-"ignore lacheck for {
-"let g:syntastic_tex_lacheck_quiet_messages = {'regex':'\Vpossible unwanted space at'}
-
 "ale config
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = 'X'
@@ -328,6 +331,12 @@ let g:ale_c_gcc_options = '-Wall -02 -std=c99'
 let g:ale_cpp_gcc_options = '-Wal -02 -std=c++14'
 let g:ale_c_cppcheck_options = ''
 let g:ale_cpp_cppcheck_options = ''
+
+"Ultisnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/']
 
 "gutentags
 let g:gutentags_project_root = ['.root','.svn','.git']
@@ -358,3 +367,15 @@ if has("cscope")
   nmap <C-/>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
   nmap <C-/>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
   nmap <C-/>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+" ===
+" === Tab management
+" ===
+" Create a new tab with tu
+noremap tu :tabe<CR>
+" Move around tabs with tn and ti
+noremap tn :-tabnext<CR>
+noremap ti :+tabnext<CR>
+" Move the tabs with tmn and tmi
+noremap tmn :-tabmove<CR>
+noremap tmi :+tabmove<CR>

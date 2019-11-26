@@ -143,10 +143,10 @@ if &t_Co > 255
       "hi CursorLine               ctermbg=195   cterm=none
       "hi CursorLineNr ctermfg=231               cterm=none
    endif
-   hi Boolean         ctermfg=135
+   hi Boolean         ctermfg=165              cterm=bold
    hi Character       ctermfg=144
    hi Number          ctermfg=15
-   hi String          ctermfg=208
+   hi String          ctermfg=190              cterm=bold
    hi Conditional     ctermfg=82               cterm=bold
    hi Constant        ctermfg=51               cterm=bold
    hi Cursor          ctermfg=16  ctermbg=253
@@ -166,7 +166,7 @@ if &t_Co > 255
    hi Float           ctermfg=135
    hi FoldColumn      ctermfg=67  ctermbg=16
    hi Folded          ctermfg=67  ctermbg=16
-   hi Function        ctermfg=118
+   hi Function        ctermfg=118               cterm=bold
    hi Identifier      ctermfg=208               cterm=none
    hi Ignore          ctermfg=244 ctermbg=232
    hi IncSearch       ctermfg=193 ctermbg=16
@@ -188,9 +188,9 @@ if &t_Co > 255
    hi PmenuThumb      ctermfg=81
 
    hi PreCondit       ctermfg=118               cterm=bold
-   hi PreProc         ctermfg=118
+   hi PreProc         ctermfg=118               cterm=bold
    hi Question        ctermfg=81
-   hi Repeat          ctermfg=161               cterm=bold
+   hi Repeat          ctermfg=123               cterm=bold
    hi Search          ctermfg=0   ctermbg=222   cterm=NONE
 
    " marks column
@@ -207,14 +207,14 @@ if &t_Co > 255
    hi Statement       ctermfg=190               cterm=bold
    hi StatusLine      ctermfg=238 ctermbg=253
    hi StatusLineNC    ctermfg=244 ctermbg=232
-   hi StorageClass    ctermfg=208
+   hi StorageClass    ctermfg=208               cterm=bold
    hi Structure       ctermfg=81
    hi Tag             ctermfg=161
    hi Title           ctermfg=166
    hi Todo            ctermfg=231 ctermbg=232   cterm=bold
 
-   hi Typedef         ctermfg=198
-   hi Type            ctermfg=198                cterm=none
+   hi Typedef         ctermfg=177               cterm=bold
+   hi Type            ctermfg=177               cterm=bold
    hi Underlined      ctermfg=244               cterm=underline
 
    hi VertSplit       ctermfg=244 ctermbg=232   cterm=bold
