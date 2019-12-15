@@ -41,8 +41,10 @@ noremap K 5j
 noremap I 5k
 noremap H I
 noremap <LEADER><CR> :vsplit<CR>
-map <LEADER>j <C-w>h
-map <LEADER>l <C-w>l
+map <C-j> <C-w>h
+map <C-l> <C-w>l
+map <C-k> <C-w>j
+map <C-i> <C-w>k
 map <left> :vertical resize-5<CR>
 map <right> :vertical resize+5<CR>
 map t :tabe<CR>
@@ -65,6 +67,12 @@ func! CompileRun()
     :sp
     :res -15
     :term ./%<
+  elseif &filetype == "c"
+    exec "!gcc % -Wall -o %<"
+    set splitbelow
+    :sp
+    :res -15
+    :term ./%<
   elseif &filetype == 'python'
     set splitbelow
     :sp
@@ -82,14 +90,12 @@ func! CompileRun()
 endfunc
 
 call plug#begin('~/.config/nvim/plugged')
-"vim-cmake
-Plug 'ilyachur/cmake4vim'
+"source explorer
+Plug 'wesleyche/SrcExpl'
 "vim-snippets
 Plug 'honza/vim-snippets'
 "UltiSnips
 Plug 'SirVer/ultisnips'
-"gutentags
-Plug 'ludovicchabant/vim-gutentags'
 "ale
 Plug 'dense-analysis/ale'
 "coc
@@ -129,8 +135,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "auto-pairs
 Plug 'jiangmiao/auto-pairs'
-"completeparameter
-Plug 'tenfyzhong/CompleteParameter.vim'
 "nerdtree
 Plug 'scrooloose/nerdtree'
 "vim-nerdtree-syntax-highlight
@@ -141,22 +145,11 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'majutsushi/tagbar'
 "nerdcommenter
 Plug 'scrooloose/nerdcommenter'
-"ncm2
-"Plug 'ncm2/ncm2'
-"Plug 'roxma/nvim-yarp'
-"Plug 'ncm2/ncm2-bufword'
-"Plug 'ncm2/ncm2-path'
-"Plug 'ncm2/ncm2-match-highlight'
-"Plug 'ncm2/ncm2-pyclang'
 "language sercer
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'zsh install.sh',
     \ }
-"syntastic
-"Plug 'vim-syntastic/syntastic'
-"vim-snazzy
-"Plug 'connorholyday/vim-snazzy'
 call plug#end()
 
 "cpp highlight configuration
@@ -338,14 +331,6 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/']
 
-"gutentags
-let g:gutentags_project_root = ['.root','.svn','.git']
-
-"ctags
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-
 "cscopse
 if has("cscope")
   set csprg=/usr/bin/cscope
@@ -359,23 +344,34 @@ if has("cscope")
     set csverb
   endif 
 
-  nmap <C-/>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-  nmap <C-/>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-  nmap <C-/>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-  nmap <C-/>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-  nmap <C-/>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-  nmap <C-/>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-  nmap <C-/>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-  nmap <C-/>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+" ===
+" === Source explorer
+" ===
+nmap <F8> :SrcExplToggle<CR>
+" // Set "Enter" key to jump into the exact definition context 
+let g:SrcExpl_jumpKey = "<ENTER>" 
 
-" ===
-" === Tab management
-" ===
-" Create a new tab with tu
-noremap tu :tabe<CR>
-" Move around tabs with tn and ti
-noremap tn :-tabnext<CR>
-noremap ti :+tabnext<CR>
-" Move the tabs with tmn and tmi
-noremap tmn :-tabmove<CR>
-noremap tmi :+tabmove<CR>
+" // Set "Space" key for back from the definition context 
+let g:SrcExpl_gobackKey = "<SPACE>"
+
+" // Set "<F3>" key for displaying the previous definition in the jump list 
+let g:SrcExpl_prevDefKey = "<F3>" 
+
+" // Set "<F4>" key for displaying the next definition in the jump list 
+let g:SrcExpl_nextDefKey = "<F4>"
+
+" // Set the height of Source Explorer window 
+let g:SrcExpl_winHeight = 8 
+
+" // Set 100 ms for refreshing the Source Explorer 
+let g:SrcExpl_refreshTime = 100
+
+" // Do not let the Source Explorer update the tags file when opening 
+let g:SrcExpl_isUpdateTags = 0
+
+" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
+" // create/update the tags file 
+let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
+
+" // Set "<F12>" key for updating the tags file artificially 
+let g:SrcExpl_updateTagsKey = "<F12>"
