@@ -1,0 +1,24 @@
+snippet make
+target = ${1:target}
+objects = 
+sources = 
+
+$(target): $(objects)
+	g++ -o $(target) $(objects)
+
+include $(sources:.cpp=.d)
+
+$(objects): %.o : %.cpp
+	g++ -c $< -o $@
+
+%.d: %.cpp
+	@set -e; rm -f $@; \
+	g++ -MM $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+.PHONY : clean
+clean:
+	-rm $(target) $(objects) $(sources:.cpp=.d)
+${0}
+endsnippet
