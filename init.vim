@@ -1,3 +1,4 @@
+set background=light
 filetype on
 filetype plugin on
 filetype plugin indent on
@@ -6,21 +7,20 @@ set mouse=a
 set encoding=utf-8
 let &t_ut=''
 syntax on
-set background=light
-colorscheme molokai
+colorscheme define
 set number
+set cursorline
 set noerrorbells
 set autoindent
 set cindent
 set expandtab
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 set list
 set listchars=tab:▸\ ,trail:▫
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 set nocompatible
-set cursorline
 set wrap
 set wildmenu
 set showcmd
@@ -31,8 +31,9 @@ set smartcase
 set scrolloff=5
 noremap = nzz
 noremap - Nzz
+nnoremap <CR> o<Esc>
 map <LEADER>m :nohlsearch<CR>
-map se <C-g>
+noremap se <C-g>
 noremap j h
 noremap i k
 noremap k j
@@ -40,22 +41,24 @@ noremap h i
 noremap K 5j
 noremap I 5k
 noremap H I
+inoremap <C-j> <Left>
+inoremap <C-l> <Right>
 noremap <LEADER><CR> :vsplit<CR>
-map <C-j> <C-w>h
-map <C-l> <C-w>l
-map <C-k> <C-w>j
-map <C-i> <C-w>k
-map <left> :vertical resize-5<CR>
-map <right> :vertical resize+5<CR>
-map t :tabe<CR>
-map tn :+tabnext<CR>
-map tp :-tabnext<CR>
-map S :w<CR>
+noremap <C-j> <C-w>h
+noremap <C-l> <C-w>l
+noremap <C-k> <C-w>j
+noremap <C-i> <C-w>k
+noremap <C-left> :vertical resize-5<CR>
+noremap <C-right> :vertical resize+5<CR>
+noremap t :tabe<CR>
+noremap tn :+tabnext<CR>
+noremap tp :-tabnext<CR>
+noremap S :w<CR>
 map s <nop>
-map Q :q<CR>
+noremap Q :q<CR>
 set clipboard+=unnamedplus
 " Compile function
-map r :call CompileRun()<CR>
+noremap r :call CompileRun()<CR>
 func! CompileRun()
   exec "w"
   if &filetype == 'tex'
@@ -65,7 +68,7 @@ func! CompileRun()
     exec "!g++ -std=c++11 % -Wall -o %<"
     set splitbelow
     :sp
-    :res -15
+    :res -12
     :term ./%<
   elseif &filetype == "c"
     exec "!gcc % -Wall -o %<"
@@ -90,8 +93,12 @@ func! CompileRun()
 endfunc
 
 call plug#begin('~/.config/nvim/plugged')
-"source explorer
-Plug 'wesleyche/SrcExpl'
+"cpp highlight
+Plug 'octol/vim-cpp-enhanced-highlight'
+"LeaderF : efficent search tool
+Plug 'Yggdroot/LeaderF'
+"auto generate ctag data
+Plug 'ludovicchabant/vim-gutentags'
 "vim-snippets
 Plug 'honza/vim-snippets'
 "UltiSnips
@@ -115,8 +122,6 @@ Plug 'tmhedberg/SimpylFold'
 Plug 'Yggdroot/indentLine'
 " Undo Tree
 Plug 'mbbill/undotree/'
-"nerdtree-git
-Plug 'Xuyuanp/nerdtree-git-plugin'
 "vimwiki
 Plug 'vimwiki/vimwiki'
 "/vim-table-mode
@@ -125,8 +130,6 @@ Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for' :['markdown', 'vim-plug'] }
 "vim-colorschemes
 Plug 'flazz/vim-colorschemes'
-"CPP syntax highlight
-Plug 'octol/vim-cpp-enhanced-highlight'
 "rainbow
 Plug 'luochen1990/rainbow'
 "vim-airline
@@ -152,26 +155,11 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 call plug#end()
 
-"cpp highlight configuration
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_decl_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
-let g:cpp_no_function_highlight = 1
-
 "rainbow active
 let g:rainbow_active = 1
 
 "airline-theme
 let g:airline_theme='light'
-
-"complete_parameter
-inoremap <silent><expr> ( complete_parameter#pre_complete("()")
-smap <c-j> <Plug>(complete_parameter#goto_next_parameter)
-imap <c-j> <Plug>(complete_parameter#goto_next_parameter)
-smap <c-k> <Plug>(complete_parameter#goto_previous_parameter)
-imap <c-k> <Plug>(complete_parameter#goto_previous_parameter))
-
 
 "nerdtree
 nnoremap <silent><leader>n :NERDTreeToggle<cr>
@@ -207,23 +195,6 @@ let g:NERDDefaultAlign              = 'left'
 let g:NERDCommentEmptyLines         = 1
 let g:NERDTrimTrailingWhitespace    = 1
 let g:NERDToggleCheckAllLines       = 1
-
-" enable ncm2 for all buffers
-"autocmd BufEnter * call ncm2#enable_for_buffer()
-
-
-"IMPORTANT: :help Ncm2PopupOpen for more information
-"set completeopt=noinsert,menuone,noselect
-
-"syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
 
 " ===
 " === MarkdownPreview
@@ -313,7 +284,6 @@ nmap <leader>rn <Plug>(coc-rename)
 let g:tex_flavor = "latex"
 
 "ale config
-let g:ale_sign_column_always = 1
 let g:ale_sign_error = 'X'
 let g:ale_sign_warning = 'w'
 let g:ale_statusline_format = ['✗ 5%d','✹ %d','✔︎ OK',]
@@ -331,47 +301,45 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/nvim/Ultisnips/']
 
-"cscopse
-if has("cscope")
-  set csprg=/usr/bin/cscope
-  set csto=1
-  set cst
-  set nocsverb
-  " add any database in current directory
-    if filereadable("cscope.out")
-      cs add cscope.out
-    endif
-    set csverb
-  endif 
+let g:gutentags_add_default_project_roots = 0
 
-" ===
-" === Source explorer
-" ===
-nmap <F8> :SrcExplToggle<CR>
-" // Set "Enter" key to jump into the exact definition context 
-let g:SrcExpl_jumpKey = "<ENTER>" 
+" gutentags搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归 "
+let g:gutentags_project_root = ['.root']
 
-" // Set "Space" key for back from the definition context 
-let g:SrcExpl_gobackKey = "<SPACE>"
+" " 所生成的数据文件的名称 "
+let g:gutentags_ctags_tagfile = '.tags'
 
-" // Set "<F3>" key for displaying the previous definition in the jump list 
-let g:SrcExpl_prevDefKey = "<F3>" 
+" " 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录 "
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
 
-" // Set "<F4>" key for displaying the next definition in the jump list 
-let g:SrcExpl_nextDefKey = "<F4>"
+if isdirectory("kernel/") && isdirectory("mm/")
+    let g:gutentags_file_list_command = 'find arch/arm* arch/riscv block crypto drivers fs include init ipc kernel lib mm net security sound virt'
+endif
 
-" // Set the height of Source Explorer window 
-let g:SrcExpl_winHeight = 8 
+" 检测 ~/.cache/tags 不存在就新建 "
+if !isdirectory(s:vim_tags)
+    silent! call mkdir(s:vim_tags, 'p')
+endif
 
-" // Set 100 ms for refreshing the Source Explorer 
-let g:SrcExpl_refreshTime = 100
+" 配置 ctags 的参数 "
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 
-" // Do not let the Source Explorer update the tags file when opening 
-let g:SrcExpl_isUpdateTags = 0
+" search word under cursor, the pattern is treated as regex, and enter normal
+" mode directly
+noremap <C-F> :<C-U><C-R>=printf("Leaderf rg -e %s ", expand("<cword>"))<CR>
+highlight Lf_hl_rgHighlight guifg=#000000 guibg=#CCCC66 ctermfg=green ctermbg=185
+highlight Lf_hl_match gui=bold guifg=Blue cterm=bold ctermfg=green
+highlight Lf_hl_match0 gui=bold guifg=Blue cterm=bold ctermfg=green
+highlight Lf_hl_match1 gui=bold guifg=Blue cterm=bold ctermfg=green
+highlight Lf_hl_match2 gui=bold guifg=Blue cterm=bold ctermfg=green
+highlight Lf_hl_match3 gui=bold guifg=Blue cterm=bold ctermfg=green
+highlight Lf_hl_match4 gui=bold guifg=Blue cterm=bold ctermfg=green
+highlight Lf_hl_matchRefine  gui=bold guifg=Magenta cterm=bold ctermfg=green
 
-" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
-" // create/update the tags file 
-let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
-
-" // Set "<F12>" key for updating the tags file artificially 
-let g:SrcExpl_updateTagsKey = "<F12>"
+" cpp highlight
+let g:cpp_class_decl_highlight = 1
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
